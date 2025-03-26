@@ -1,55 +1,87 @@
+
+@font-face {
+    font-family: 'HostGrotesk';
+    src: url('/fonts/HostGrotesk-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'HostGrotesk';
+    src: url('/fonts/HostGrotesk-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'HostGrotesk';
+    src: url('/fonts/HostGrotesk-BoldItalic.ttf') format('truetype');
+    font-weight: 700;
+    font-style: italic;
+}
+
+*{
+    font-family: 'HostGrotesk', sans-serif;
+    font-weight: 400;
+}
 body{
+
     margin: 0px;
     padding: 0px;
-    background-color: #1f2f33;
+    background-color: #333332;
 }
 
 .navBar{
     width: 100%;
-    background-color: #535e66;
+    background-color: #151f46;
     padding-top: 6px;
     padding-bottom: 10px;
 }
 .barText{
     margin-left:2%;
-    font-size: xx-large;
-    color:white;
+    font-size: 2rem;
+    color:#3ea566;
 }
 .mainSection{
     width: 85%;
     margin-left: 15%;
 }
 .title{
-    font-size:120px;
-    color: #db9f67;
+    font-size:7.5rem;
+    color: #40b16e;
 }
 .slogan{
+    margin-left: 1%;
     font-size: x-large;
-    color: white;
-    font-style: oblique;
+    color: #3c9e49;
+    font-style: italic;
     background-color: black;
     padding: 10px;
 }
 .inputContainer{
-    width: 60%;
-    padding: 10px;
+    width: 80%;
+    padding: 15px;
     margin-top: 40px;
     background-color: white;
-    border-radius: 10px;
+    border-radius: 40px;
 }
 input{
     width:100%;
     border: 0;
+    color: black;
+    font-size: 2rem;
+    font-weight: bold;
 }
 
-input:target{
+input:focus{
     border: 0;
+    outline: none;
 }
 
 .subtitle{
     margin-top: 20px;
     margin-bottom: 10px;
-    color: #db9f67;
+    color: #40af6e;
     font-size: x-large;
     font-weight: bold;
 }
@@ -58,10 +90,11 @@ input:target{
     padding: 20px;
     display: inline-grid;
     grid-template-columns: repeat(4, 1fr);
-    background-color: #535e66;
+    background-color: #151f46;
     width: 60%;
     border-radius: 16px;
-    grid-gap: 10px;
+    
+    grid-gap: 20px;
     
 }
 img{
@@ -71,11 +104,112 @@ img{
 }
 
 .specs{
+    display: flex;
+    justify-items: center;
     padding: 20px;
     display: inline-grid;
     grid-template-columns: repeat(2, 1fr);
-    background-color: #535e66;
-    width: 60%;
+    background-color: #151f46;
+    width:70%;
     border-radius: 16px;
     grid-gap: 10px;
+}
+.specs input{
+    font-family: Arial, Helvetica, sans-serif;
+    margin-left: 10%;
+    padding: 15px;
+    width: 40%;
+    border-radius: 60px;
+    border: 0;
+    outline: none;
+    font-size: larger;
+    font-weight: bold;
+    text-align: center;
+}
+.specs input:focus{
+    border: 0;
+}
+.specs span{
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #89dd9c;
+}
+
+.secoSection{
+    margin-top: 100px;
+    width: 80%;
+    margin-left: 9%;
+    font-size:5.5rem;
+    color: #40b16e;
+}
+.products {
+    width: 100%;
+    max-width: 1200px;
+    margin-left: 2%;
+    padding: 1rem;
+}
+
+.productRow {
+    display: grid;
+    grid-template-columns: minmax(100px, 150px) 3fr 1fr;
+    gap: 1.5rem;
+    align-items: start;
+    padding: 1.5rem;
+    padding-right: 2.5rem;
+    background-color: #151f46;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    margin-bottom: 1rem;
+    transition: transform 0.2s;
+}
+
+.productRow:hover {
+    transform: translateY(-5px);
+}
+
+.productRow img:first-child {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    border-radius: 4px;
+    padding: 0;
+}
+
+.productName {
+    display: flex;
+    flex-direction: column;
+    
+}
+
+.productName h3 {
+    margin: 0;
+    font-size: 2.2rem;
+    color: #88db99;
+    font-weight: bold;
+}
+
+.productName img {
+    margin-top: 5%;
+    width: 40%;
+    height: auto;
+    object-fit: contain;
+}
+
+.price{
+
+    border-radius: 30px;
+    height: 100%;
+    width: 90%;
+    font-size: 2.5rem;
+    color: white;
+    padding-right: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #40b16e;
+}
+.price div{
+    font-weight: bold;
 }
