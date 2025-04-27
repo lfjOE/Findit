@@ -21,15 +21,14 @@
 .custom-bg{
     background-color: #141e46;
 }
+
 body{
     font-family: 'HostGrotesk';
 }
 .display-0{
     font-size: 8rem;
 }
-.logo-store{
-    max-height: 80px;
-    justify-content: center;
-    display: flex;
-    object-fit: contain;
+.stores{
+    width: 6rem;
+    height:6rem;
 }
