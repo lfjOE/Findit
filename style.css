@@ -27,3 +27,9 @@ body{
 .display-0{
     font-size: 8rem;
 }
+.logo-store{
+    max-height: 80px;
+    justify-content: center;
+    display: flex;
+    object-fit: contain;
+}
