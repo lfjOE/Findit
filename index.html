@@ -28,8 +28,9 @@
       <div class="mb-5">
         <div class="col-md-8">
           <div class="input-group input-group-lg">
-            <input type="text" id="search" class="form-control rounded-pill" placeholder="Buscar...">
+            <input type="text" id="search" class="form-control rounded-pill" placeholder="Buscar..." required>
           </div>
+          <button  id="find-button" class="btn btn-success rounded-pill ms-2 mt-3 fw-bold fs-4">Go and find it!</button>
         </div>
       </div>
 
@@ -108,7 +109,7 @@
     </main>
 
     <!--Resultados de búsqueda-->
-    <section class="container mb-5 ">
+    <section id="results" class="container mb-5 d-none">
       <div class="text-center mb-4">
         <h2 class="display-4 text-success">It is here. You just FindIt!</h2>
       </div>
