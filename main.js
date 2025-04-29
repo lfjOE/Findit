@@ -8,7 +8,8 @@ const results = document.querySelector('#results');
 const searchInput = document.querySelector('#search');
 
 console.log(findButton.innerHTML);
-const selectedStores = [];
+const selectedStores = getStoresFromLocal();
+setSelectedStores();
 
 function verifyInput(){
     if (searchInput.value.trim() !== "" && selectedStores.length > 0) {
@@ -21,9 +22,32 @@ function verifyInput(){
 function scrollToResults() {
     const resultsSection = document.querySelector('#results');
     resultsSection.scrollIntoView({
-        behavior: 'smooth',
+        behavior: 'smooth',	
         block: 'start'     
     });
+}
+
+function saveStoresIntoLocal(){
+    localStorage.setItem('selectedStores', JSON.stringify(selectedStores));
+}
+function getStoresFromLocal(){
+    const stores = localStorage.getItem('selectedStores');
+    if (stores) {
+        return JSON.parse(stores);
+    } else {
+        return [];
+    }
+}
+
+function setSelectedStores(){
+    storesImages.forEach(image=>{
+        const storeName = image.getAttribute('alt');
+        if (selectedStores.includes(storeName)){
+            image.parentElement.classList.add('selected');
+        }else{
+            image.parentElement.classList.remove('selected');
+        }
+    })
 }
 
 storesImages.forEach(image=>{
@@ -41,6 +65,7 @@ storesImages.forEach(image=>{
         }
         console.log(selectedStores);
         verifyInput();
+        saveStoresIntoLocal();
     })
 })
 
