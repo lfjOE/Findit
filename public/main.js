@@ -100,3 +100,55 @@ searchInput.addEventListener("input", () => {
 function findProducts() {
   results.classList.remove("d-none");
 }
+
+// Cargar tiendas dinámicamente desde la base de datos
+function renderStores() {
+  fetch("/stores")
+    .then((res) => res.json())
+    .then((stores) => {
+      const storesRow = document.querySelector(
+        ".row.g-4.justify-content-center.custom-bg"
+      );
+      if (!storesRow) return;
+      storesRow.innerHTML = stores
+        .map(
+          (store) => `
+        <div class="col-6 col-sm-3">
+          <div class="box-shadow card bg-white d-flex align-items-center justify-content-center p-3">
+            <img
+              src="${store.imgloc}"
+              class="stores logo-store mx-auto"
+              alt="${store.storename}"
+            />
+          </div>
+        </div>
+      `
+        )
+        .join("");
+      // Volver a asignar eventos a las imágenes
+      setStoreImageEvents();
+    });
+}
+
+function setStoreImageEvents() {
+  const storesImages = document.querySelectorAll(".stores");
+  storesImages.forEach((image) => {
+    const storeName = image.getAttribute("alt");
+    image.parentElement.addEventListener("click", () => {
+      if (image.parentElement.classList.contains("selected")) {
+        image.parentElement.classList.remove("selected");
+        const index = selectedStores.indexOf(storeName);
+        selectedStores.splice(index, 1);
+      } else {
+        image.parentElement.classList.add("selected");
+        selectedStores.push(storeName);
+      }
+      verifyInput();
+      saveStoresIntoLocal();
+    });
+  });
+  setSelectedStores();
+}
+
+// Llama a renderStores al cargar la página
+renderStores();

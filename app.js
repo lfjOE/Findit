@@ -67,6 +67,13 @@ app.get("/session-username", (req, res) => {
   res.json({ username: req.session.username || null });
 });
 
+app.get("/stores", (req, res) => {
+  db.query("SELECT * FROM store", (err, results) => {
+    if (err) return res.status(500).json({ error: "DB error" });
+    res.json(results);
+  });
+});
+
 app.listen(3000, () => {
   console.log("Servidor corriendo en http://localhost:3000");
 });
