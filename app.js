@@ -74,6 +74,26 @@ app.get("/stores", (req, res) => {
   });
 });
 
+app.get("/search", (req, res) => {
+  const { q, stores } = req.query;
+  let sql = `SELECT product.*, store.storename, store.imgloc as store_img FROM product 
+    JOIN store ON product.StoreId = store.id 
+    WHERE product.productname LIKE ?`;
+  let params = [`%${q}%`];
+
+  if (stores && stores.length > 0) {
+    // stores puede ser un string (una tienda) o un array (varias tiendas)
+    let storesArr = Array.isArray(stores) ? stores : [stores];
+    sql += ` AND store.storename IN (${storesArr.map(() => "?").join(",")})`;
+    params = [`%${q}%`, ...storesArr];
+  }
+
+  db.query(sql, params, (err, results) => {
+    if (err) return res.status(500).json({ error: "DB error" });
+    res.json(results);
+  });
+});
+
 app.listen(3000, () => {
   console.log("Servidor corriendo en http://localhost:3000");
 });

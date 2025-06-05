@@ -98,7 +98,59 @@ searchInput.addEventListener("input", () => {
 });
 
 function findProducts() {
+  const searchValue = searchInput.value.trim();
+  if (!searchValue) return;
+  // Obtener tiendas seleccionadas
+  const selectedStores = getStoresFromLocal();
+  // Hacer fetch al backend
+  const params = new URLSearchParams();
+  params.append("q", searchValue);
+  selectedStores.forEach((store) => params.append("stores", store));
+
+  fetch(`/search?${params.toString()}`)
+    .then((res) => res.json())
+    .then((products) => {
+      renderResults(products);
+    });
   results.classList.remove("d-none");
+}
+
+function renderResults(products) {
+  const resultsSection = document.querySelector(
+    "#results .row.justify-content-center"
+  );
+  if (!resultsSection) return;
+  if (!products.length) {
+    resultsSection.innerHTML =
+      '<div class="text-center text-danger fw-bold fs-4">No se encontraron resultados</div>';
+    return;
+  }
+  resultsSection.innerHTML = products
+    .map(
+      (product) => `
+    <div class="col-lg-10">
+      <div class="card mb-4 shadow-sm p-4 custom-bg rounded-5">
+        <div class="row g-0 align-items-center">
+          <div class="col-md-2">
+            <img src="${product.imgloc}" class="img-fluid rounded-start" alt="${product.productname}" />
+          </div>
+          <div class="col-md-7">
+            <div class="card-body">
+              <h3 class="card-title text-success fw-bold fs-3">${product.productname}</h3>
+              <img src="${product.store_img}" alt="${product.storename}" class="img-fluid bg-white p-2 rounded-3" style="max-width: 150px" />
+            </div>
+          </div>
+          <div class="col-md-3 text-center">
+            <div class="badge bg-success text-white fs-3 p-3 rounded-pill">
+              $${product.price}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `
+    )
+    .join("");
 }
 
 // Cargar tiendas dinámicamente desde la base de datos
