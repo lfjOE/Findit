@@ -9,6 +9,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(express.static('public'));
 
+app.use('/res', express.static('res'));
+
 app.post('/login', (req, res) =>{
     const {username, password} = req.body;
     const sql = 'SELECT * FROM usuarios WHERE usuario = ? AND contrasena = ?';

@@ -7,12 +7,14 @@ const results = document.querySelector('#results');
 
 const searchInput = document.querySelector('#search');
 
-console.log(findButton.innerHTML);
+const minPriceInput = document.querySelector('#minPrice');
+const maxPriceInput = document.querySelector('#maxPrice');
+
 const selectedStores = getStoresFromLocal();
 setSelectedStores();
 
 function verifyInput(){
-    if (searchInput.value.trim() !== "" && selectedStores.length > 0) {
+    if (searchInput.value.trim() !== "") {
         findButton.disabled = false; 
     } else {
         findButton.disabled = true; 
@@ -81,4 +83,13 @@ searchInput.addEventListener('input', () => {
 
 function findProducts(){
     results.classList.remove('d-none');
+    const resultsTitle = document.querySelector('#results h2');
+    const searchTerm = searchInput.value.trim();
+    const minPrice = minPriceInput.value;
+    const maxPrice = maxPriceInput.value;
+    let storesText = selectedStores.length > 0 ? `en las tiendas seleccionadas: ${selectedStores.join(', ')}` : 'en todas las tiendas disponibles';
+    let message = `Buscando "${searchTerm}" ${storesText}`;
+    if (minPrice) message += `, precio mínimo: ${minPrice}`;
+    if (maxPrice) message += `, precio máximo: ${maxPrice}`;
+    resultsTitle.textContent = message;
 }

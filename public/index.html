@@ -9,22 +9,18 @@
     
   </head>
   <body class="bg-dark text-white">
-    <!--NavBar-->
     <nav class="navbar navbar-dark py-3 custom-bg fixed-top">
       <div class="container-fluid">
         <a class="navbar-brand fs-1 fw-bold text-success" href="#">FindIt</a>
       </div>
     </nav>
 
-    <!--Sección principal-->
     <main class="container" style="margin-top: 6rem;">
-      <!--Slogan y nombre de la pagina-->
       <div class=" mb-4">
         <h1 class="display-0 text-success ">FindIt</h1>
         <p class="fs-4 fst-italic bg-black d-inline-block p-2 rounded text-light">Wish it. Search it. Find it</p>
       </div>
 
-      <!--Busqueda de articulos-->
       <div class="mb-5">
         <div class="col-md-8">
           <div class="input-group input-group-lg">
@@ -34,98 +30,92 @@
         </div>
       </div>
 
-      <!--Imagenes de tiendas-->
       <section class="mb-5">
         <h2 class="display-5 text-success mb-3 fw-bold mb-3">Store</h2>
         <div class="row g-4 justify-content-center custom-bg p-4 rounded-4 mt-3">
           <div class="col-6 col-sm-3 ">
             <div class="box-shadow card bg-white d-flex align-items-center justify-content-center p-3">
-              <img src="res/amazon-com-logo.svg" class="stores logo-store mx-auto" alt="Amazon">
+              <img src="/res/amazon-com-logo.svg" class="stores logo-store mx-auto" alt="Amazon">
             </div>
           </div>
           <div class="col-6 col-sm-3">
             <div class="box-shadow card bg-white d-flex align-items-center justify-content-center p-3">
-              <img src="res/walmart-com-logo.svg" class="stores logo-store mx-auto" alt="Walmart">
+              <img src="/res/walmart-com-logo.svg" class="stores logo-store mx-auto" alt="Walmart">
             </div>
           </div>
           <div class="col-6 col-sm-3">
             <div class="box-shadow card bg-white d-flex align-items-center justify-content-center p-3">
-              <img src="res/aliexpress-com-logo.svg" class="stores logo-store mx-auto" alt="Aliexpress">
+              <img src="/res/aliexpress-com-logo.svg" class="stores logo-store mx-auto" alt="Aliexpress">
             </div>
           </div>
           <div class="col-6 col-sm-3">
             <div class="box-shadow card bg-white d-flex align-items-center justify-content-center p-3">
-              <img src="res/temu-logo.svg" class="stores logo-store mx-auto" alt="Temu">
+              <img src="/res/temu-logo.svg" class="stores logo-store mx-auto" alt="Temu">
             </div>
           </div>
           <div class="col-6 col-sm-3">
             <div class="box-shadow card bg-white d-flex align-items-center justify-content-center p-3">
-              <img src="res/nike-com-logo.svg" class="stores logo-store mx-auto" alt="Nike">
+              <img src="/res/nike-com-logo.svg" class="stores logo-store mx-auto" alt="Nike">
             </div>
           </div>
           <div class="col-6 col-sm-3">
             <div class="box-shadow card bg-white d-flex align-items-center justify-content-center p-3">
-              <img src="res/adidas-com-logo.svg" class="stores logo-store mx-auto" alt="Adidas">
+              <img src="/res/adidas-com-logo.svg" class="stores logo-store mx-auto" alt="Adidas">
             </div>
           </div>
           <div class="col-6 col-sm-3">
             <div class="box-shadow card bg-white d-flex align-items-center justify-content-center p-3">
-              <img src="res/coppel-logo.svg" class="stores logo-store mx-auto" alt="Coppel">
+              <img src="/res/coppel-logo.svg" class="stores logo-store mx-auto" alt="Coppel">
             </div>
           </div>
           <div class="col-6 col-sm-3">
             <div class="box-shadow card bg-white d-flex align-items-center justify-content-center p-3">
-              <img src="res/liverpool-logo.svg" class="stores logo-store mx-auto" alt="Liverpool">
+              <img src="/res/liverpool-logo.svg" class="stores logo-store mx-auto" alt="Liverpool">
             </div>
           </div>
         </div>
       </section>
 
-      <!--Especificaciones para los productos-->
       <section class="mb-5">
         <h2 class="display-5 text-success mb-3 fw-bold">Specs</h2>
         <form class="row g-3 justify-content-center custom-bg p-4 rounded-5 mt-3">
-          <!--Más que-->
           <div class="col-12 col-md-6">
             <div class="d-flex align-items-center">
               <label class="form-label text-success fw-bold fs-2 mb-0 text-nowrap">
                 Más que
               </label>
-              <input class="form-control rounded-pill text-center ms-3 flex-grow-1" placeholder="">
+              <input type="number" id="minPrice" class="form-control rounded-pill text-center ms-3 flex-grow-1" placeholder="Precio mínimo">
             </div>
           </div>
         
-          <!--Menos que-->
           <div class="col-12 col-md-6">
             <div class="d-flex align-items-center">
               <label class="form-label text-success fw-bold fs-2 mb-0 text-nowrap">
                 Menos que
               </label>
-              <input class="form-control rounded-pill text-center ms-3 flex-grow-1" placeholder="">
+              <input type="number" id="maxPrice" class="form-control rounded-pill text-center ms-3 flex-grow-1" placeholder="Precio máximo">
             </div>
           </div>
         </form>
       </section>
     </main>
 
-    <!--Resultados de búsqueda-->
     <section id="results" class="container mb-5 d-none">
       <div class="text-center mb-4">
         <h2 class="display-4 text-success">Already here. Already FindIt</h2>
       </div>
 
-      <!--Productos-->
       <div class="row justify-content-center">
         <div class="col-lg-10">
           <div class="card mb-4 shadow-sm p-4 custom-bg rounded-5">
             <div class="row g-0 align-items-center">
               <div class="col-md-2">
-                <img src="res/gamerMouse.jpg" class="img-fluid rounded-start" alt="Alambric green gamer mouse">
+                <img src="/res/gamerMouse.jpg" class="img-fluid rounded-start" alt="Alambric green gamer mouse">
               </div>
               <div class="col-md-7">
                 <div class="card-body">
                   <h3 class="card-title text-success fw-bold fs-3">Alambric green gamer mouse</h3>
-                  <img src="res/amazon-com-logo.svg" alt="Logo" class="img-fluid bg-white p-2 rounded-3" style="max-width: 150px;">
+                  <img src="/res/amazon-com-logo.svg" alt="Logo" class="img-fluid bg-white p-2 rounded-3" style="max-width: 150px;">
                 </div>
               </div>
               <div class="col-md-3 text-center">

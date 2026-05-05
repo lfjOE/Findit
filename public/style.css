@@ -18,12 +18,19 @@
     font-weight: 700;
     font-style: italic;
 }
+:root {
+    --primary-bg: #141e46;
+    --accent-color: #00bfff;
+    --text-color: #ffffff;
+    --card-bg: #ffffff;
+}
 .custom-bg{
-    background-color: #141e46;
+    background-color: var(--primary-bg);
 }
 
 body{
     font-family: 'HostGrotesk';
+    color: var(--text-color);
 }
 .display-0{
     font-size: 8rem;
@@ -38,9 +45,21 @@ body{
 
 }
 .box-shadow:hover{
-    box-shadow: 0 0 8px 2px #00ff00;
+    box-shadow: 0 0 8px 2px var(--accent-color);
 }
 .selected{
-    border: 6px solid #00ff00;
+    border: 6px solid var(--accent-color);
     border-radius: 10px;
+}
+
+.text-success {
+    color: var(--accent-color) !important;
+}
+.btn-success {
+    background-color: var(--accent-color) !important;
+    border-color: var(--accent-color) !important;
+}
+.btn-success:hover {
+    background-color: #0099cc !important;
+    border-color: #0099cc !important;
 }
