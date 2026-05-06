@@ -82,7 +82,11 @@ searchInput.addEventListener('input', () => {
 
 
 function findProducts(){
-    results.classList.remove('d-none');
+
+    if (selectedStores.length <=0){
+        alert("Debe de seleccionar por lo menos una tienda");
+    } else{
+            results.classList.remove('d-none');
     const resultsTitle = document.querySelector('#results h2');
     const searchTerm = searchInput.value.trim();
     const minPrice = minPriceInput.value;
@@ -92,4 +96,6 @@ function findProducts(){
     if (minPrice) message += `, precio mínimo: ${minPrice}`;
     if (maxPrice) message += `, precio máximo: ${maxPrice}`;
     resultsTitle.textContent = message;
+    }
+
 }
