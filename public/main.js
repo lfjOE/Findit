@@ -1,4 +1,8 @@
+// ===========================
+// DOM REFERENCES
+// ===========================
 const storesImages = document.querySelectorAll('.stores');
+const storeCards = document.querySelectorAll('.store-card');
 
 const findButton = document.querySelector('#find-button');
 findButton.disabled = true;
@@ -10,17 +14,128 @@ const searchInput = document.querySelector('#search');
 const minPriceInput = document.querySelector('#minPrice');
 const maxPriceInput = document.querySelector('#maxPrice');
 
+const priceError = document.querySelector('#price-error');
+const priceErrorText = document.querySelector('#price-error-text');
+
+const toastContainer = document.querySelector('#toast-container');
+
+// ===========================
+// STATE
+// ===========================
 const selectedStores = getStoresFromLocal();
+let hasPriceError = false;
+
+// ===========================
+// INIT
+// ===========================
 setSelectedStores();
 
+// ===========================
+// PRICE VALIDATION
+// ===========================
+function validatePrices() {
+    const minVal = minPriceInput.value.trim();
+    const maxVal = maxPriceInput.value.trim();
+    const min = parseFloat(minVal);
+    const max = parseFloat(maxVal);
+
+    // Reset states
+    hasPriceError = false;
+    minPriceInput.classList.remove('is-invalid');
+    maxPriceInput.classList.remove('is-invalid');
+    hidePriceError();
+
+    // Check negative values
+    if (minVal !== '' && min < 0) {
+        hasPriceError = true;
+        minPriceInput.classList.add('is-invalid');
+        showPriceError('El precio mínimo no puede ser negativo');
+        return;
+    }
+
+    if (maxVal !== '' && max < 0) {
+        hasPriceError = true;
+        maxPriceInput.classList.add('is-invalid');
+        showPriceError('El precio máximo no puede ser negativo');
+        return;
+    }
+
+    // Check min > max
+    if (minVal !== '' && maxVal !== '' && min > max) {
+        hasPriceError = true;
+        minPriceInput.classList.add('is-invalid');
+        maxPriceInput.classList.add('is-invalid');
+        showPriceError('El precio mínimo no puede ser mayor al precio máximo');
+        return;
+    }
+}
+
+function showPriceError(message) {
+    priceErrorText.textContent = message;
+    priceError.classList.add('visible');
+}
+
+function hidePriceError() {
+    priceError.classList.remove('visible');
+    priceErrorText.textContent = '';
+}
+
+// ===========================
+// TOAST NOTIFICATIONS
+// ===========================
+function showToast(message, type = 'info') {
+    const icons = {
+        error: '✕',
+        success: '✓',
+        info: 'ℹ'
+    };
+
+    const toast = document.createElement('div');
+    toast.className = `toast-notification toast-${type}`;
+    toast.innerHTML = `
+        <span class="toast-icon">${icons[type] || icons.info}</span>
+        <span>${message}</span>
+    `;
+
+    // Click to dismiss
+    toast.addEventListener('click', () => {
+        dismissToast(toast);
+    });
+
+    toastContainer.appendChild(toast);
+
+    // Auto-dismiss after 4 seconds
+    setTimeout(() => {
+        dismissToast(toast);
+    }, 4000);
+}
+
+function dismissToast(toast) {
+    if (!toast.parentNode) return;
+    toast.classList.add('toast-slideout');
+    toast.addEventListener('animationend', () => {
+        if (toast.parentNode) {
+            toast.parentNode.removeChild(toast);
+        }
+    });
+}
+
+// ===========================
+// INPUT VERIFICATION
+// ===========================
 function verifyInput() {
-    if (searchInput.value.trim() !== "" && selectedStores.length > 0) {
+    validatePrices();
+
+    if (searchInput.value.trim() !== "" && !hasPriceError) {
         findButton.disabled = false;
     } else {
         findButton.disabled = true;
     }
 }
 
+// ===========================
+// SCROLL
+// ===========================
 function scrollToResults() {
     const resultsSection = document.querySelector('#results');
     resultsSection.scrollIntoView({
@@ -29,9 +144,13 @@ function scrollToResults() {
     });
 }
 
+// ===========================
+// LOCAL STORAGE — STORES
+// ===========================
 function saveStoresIntoLocal() {
     localStorage.setItem('selectedStores', JSON.stringify(selectedStores));
 }
+
 function getStoresFromLocal() {
     const stores = localStorage.getItem('selectedStores');
     if (stores) {
@@ -42,173 +161,136 @@ function getStoresFromLocal() {
 }
 
 function setSelectedStores() {
-    storesImages.forEach(image => {
+    storeCards.forEach(card => {
+        const image = card.querySelector('.stores');
         const storeName = image.getAttribute('alt');
         if (selectedStores.includes(storeName)) {
-            image.parentElement.classList.add('selected');
+            card.classList.add('selected');
         } else {
-            image.parentElement.classList.remove('selected');
+            card.classList.remove('selected');
         }
-    })
+    });
 }
 
-storesImages.forEach(image => {
-    image.parentElement.addEventListener('click', () => {
-
+// ===========================
+// STORE SELECTION EVENTS
+// ===========================
+storeCards.forEach(card => {
+    card.addEventListener('click', () => {
+        const image = card.querySelector('.stores');
         const storeName = image.getAttribute('alt');
 
-        if (image.parentElement.classList.contains('selected')) {
-            image.parentElement.classList.remove('selected')
+        if (card.classList.contains('selected')) {
+            card.classList.remove('selected');
             const index = selectedStores.indexOf(storeName);
             selectedStores.splice(index, 1);
         } else {
-            image.parentElement.classList.add('selected');
+            card.classList.add('selected');
             selectedStores.push(storeName);
         }
         console.log(selectedStores);
         verifyInput();
         saveStoresIntoLocal();
-    })
-})
+    });
 
-findButton.addEventListener('click', () => {
-    findProducts();
-    scrollToResults();
+    // Keyboard support: Enter/Space to toggle
+    card.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            card.click();
+        }
+    });
 });
 
+// ===========================
+// FIND BUTTON EVENT
+// ===========================
+findButton.addEventListener('click', () => {
+    findProducts();
+});
+
+// ===========================
+// SEARCH INPUT EVENTS
+// ===========================
 searchInput.addEventListener('input', () => {
     verifyInput();
 });
 
+// Search with Enter key
 searchInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' && !findButton.disabled) {
-        findButton.click();
+        e.preventDefault();
+        findProducts();
     }
 });
 
+// ===========================
+// PRICE INPUT EVENTS
+// ===========================
+minPriceInput.addEventListener('input', () => {
+    verifyInput();
+});
 
-const storeLogos = {
-    'Amazon': '/res/amazon-com-logo.svg',
-    'Walmart': '/res/walmart-com-logo.svg',
-    'Aliexpress': '/res/aliexpress-com-logo.svg',
-    'Temu': '/res/temu-logo.svg',
-    'Nike': '/res/nike-com-logo.svg',
-    'Adidas': '/res/adidas-com-logo.svg',
-    'Coppel': '/res/coppel-logo.svg',
-    'Liverpool': '/res/liverpool-logo.svg'
-};
+maxPriceInput.addEventListener('input', () => {
+    verifyInput();
+});
 
-const storeSearchUrls = {
-    'Amazon': (term) => `https://www.amazon.com/s?k=${encodeURIComponent(term)}`,
-    'Walmart': (term) => `https://www.walmart.com/search?q=${encodeURIComponent(term)}`,
-    'Aliexpress': (term) => `https://www.aliexpress.com/w/wholesale-${encodeURIComponent(term)}.html`,
-    'Temu': (term) => `https://www.temu.com/search_result.html?search_key=${encodeURIComponent(term)}`,
-    'Nike': (term) => `https://www.nike.com/w?q=${encodeURIComponent(term)}`,
-    'Adidas': (term) => `https://www.adidas.com/us/search?q=${encodeURIComponent(term)}`,
-    'Coppel': (term) => `https://www.coppel.com/SearchDisplay?searchTerm=${encodeURIComponent(term)}`,
-    'Liverpool': (term) => `https://www.liverpool.com.mx/tienda?s=${encodeURIComponent(term)}`
-};
-
-async function findProducts() {
-    if (selectedStores.length <= 0) {
-        alert("Debe de seleccionar por lo menos una tienda");
+// ===========================
+// FIND PRODUCTS
+// ===========================
+function findProducts() {
+    // Validate prices one more time
+    validatePrices();
+    if (hasPriceError) {
+        showToast('Corrige los errores de precio antes de buscar', 'error');
         return;
     }
 
-    const searchTerm = searchInput.value.trim();
-    const minPrice = parseFloat(minPriceInput.value) || 0;
-    const maxPrice = parseFloat(maxPriceInput.value) || Infinity;
+    if (selectedStores.length <= 0) {
+        showToast('Debes seleccionar por lo menos una tienda', 'error');
+        return;
+    }
 
     results.classList.remove('d-none');
 
-    const resultsTitle = document.querySelector('#results h2');
-    const cardsContainer = document.querySelector('#cards-container');
-    const loadingSpinner = document.querySelector('#loading');
+    const searchTerm = searchInput.value.trim();
+    const minPrice = minPriceInput.value;
+    const maxPrice = maxPriceInput.value;
 
-    cardsContainer.innerHTML = '';
-    loadingSpinner.classList.remove('d-none');
+    // Search term
+    document.querySelector('#resultSearchTerm').textContent = `"${searchTerm}"`;
 
-    let storesText = `en las tiendas seleccionadas: ${selectedStores.join(', ')}`;
-    let message = `Buscando "${searchTerm}" ${storesText}`;
-    if (minPrice > 0) message += `, precio mínimo: $${minPrice}`;
-    if (maxPrice < Infinity) message += `, precio máximo: $${maxPrice}`;
-    resultsTitle.textContent = message;
+    // Store pills with mini logos
+    const storeLogos = {
+        'Amazon': '/res/amazon-com-logo.svg',
+        'Walmart': '/res/walmart-com-logo.svg',
+        'Aliexpress': '/res/aliexpress-com-logo.svg',
+        'Temu': '/res/temu-logo.svg',
+        'Nike': '/res/nike-com-logo.svg',
+        'Adidas': '/res/adidas-com-logo.svg',
+        'Coppel': '/res/coppel-logo.svg',
+        'Liverpool': '/res/liverpool-logo.svg'
+    };
 
-    try {
-        const response = await fetch(`https://dummyjson.com/products/search?q=${encodeURIComponent(searchTerm)}`);
-        if (!response.ok) throw new Error("Error en la llamada a la API");
-        const data = await response.json();
+    const storesContainer = document.querySelector('#resultStores');
+    storesContainer.innerHTML = selectedStores
+        .map(store => {
+            const logo = storeLogos[store];
+            const iconHTML = logo
+                ? `<span class="store-pill-icon"><img src="${logo}" alt=""></span>`
+                : '';
+            return `<span class="store-pill">${iconHTML}${store}</span>`;
+        })
+        .join('');
 
-        let productsList = data.products || [];
+    // Price range pills
+    const priceGroup = document.querySelector('#resultPriceGroup');
+    const priceContainer = document.querySelector('#resultPriceRange');
+    let priceHTML = '';
+    if (minPrice) priceHTML += `<span class="price-pill price-min"><span class="price-pill-arrow">↑</span> Desde $${Number(minPrice).toLocaleString()}</span>`;
+    if (maxPrice) priceHTML += `<span class="price-pill price-max"><span class="price-pill-arrow">↓</span> Hasta $${Number(maxPrice).toLocaleString()}</span>`;
+    priceContainer.innerHTML = priceHTML;
+    priceGroup.style.display = (minPrice || maxPrice) ? 'flex' : 'none';
 
-        if (productsList.length === 0) {
-            const fallbackResponse = await fetch(`https://dummyjson.com/products?limit=10`);
-            if (fallbackResponse.ok) {
-                const fallbackData = await fallbackResponse.json();
-                productsList = fallbackData.products || [];
-            }
-        }
-
-        const filteredProducts = productsList.filter(product => {
-            return product.price >= minPrice && product.price <= maxPrice;
-        });
-
-        loadingSpinner.classList.add('d-none');
-
-        if (filteredProducts.length === 0) {
-            cardsContainer.innerHTML = `
-                <div class="col-lg-10 text-center my-4">
-                    <p class="fs-4 text-warning">No se encontraron productos coincidentes en este rango de precios.</p>
-                </div>
-            `;
-            resultsTitle.textContent = "Búsqueda finalizada";
-            return;
-        }
-
-        filteredProducts.forEach((product, idx) => {
-            const assignedStore = selectedStores[idx % selectedStores.length];
-            const logoSrc = storeLogos[assignedStore] || '/res/amazon-com-logo.svg';
-            const redirectUrl = storeSearchUrls[assignedStore] ? storeSearchUrls[assignedStore](searchTerm) : '#';
-
-            const col = document.createElement('div');
-            col.className = 'col-lg-10';
-            col.style.cursor = 'pointer';
-            col.addEventListener('click', () => {
-                window.open(redirectUrl, '_blank');
-            });
-
-            col.innerHTML = `
-                <div class="card mb-4 shadow-sm p-4 custom-bg rounded-5">
-                    <div class="row g-0 align-items-center">
-                        <div class="col-md-2">
-                            <img src="${product.thumbnail || '/res/gamerMouse.jpg'}" class="img-fluid rounded-start" alt="${product.title}" style="max-height: 120px; object-fit: contain;">
-                        </div>
-                        <div class="col-md-7">
-                            <div class="card-body">
-                                <h3 class="card-title text-success fw-bold fs-3">${product.title}</h3>
-                                <img src="${logoSrc}" alt="${assignedStore}" class="img-fluid bg-white p-2 rounded-3" style="max-width: 150px;">
-                            </div>
-                        </div>
-                        <div class="col-md-3 text-center">
-                            <div class="badge bg-success text-white fs-3 p-3 rounded-pill">
-                                $${product.price}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-            cardsContainer.appendChild(col);
-        });
-
-        resultsTitle.textContent = `Se encontraron ${filteredProducts.length} productos en ${selectedStores.join(', ')}`;
-
-    } catch (err) {
-        console.error("Error al buscar productos:", err);
-        loadingSpinner.classList.add('d-none');
-        cardsContainer.innerHTML = `
-            <div class="col-lg-10 text-center my-4">
-                <p class="fs-4 text-danger">Ocurrió un error al buscar los productos. Intente de nuevo.</p>
-            </div>
-        `;
-    }
+    scrollToResults();
 }

@@ -232,14 +232,13 @@ body {
 }
 
 .store-card {
-    background: rgba(255, 255, 255, 0.95) !important;
+    background: rgba(255, 255, 255, 0.95);
     border: 2px solid transparent;
     border-radius: var(--surface-radius) !important;
     cursor: pointer;
     transition: var(--transition-smooth);
     position: relative;
     overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .store-card::after {
@@ -296,9 +295,14 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    opacity: 0;
+    transform: scale(0);
+    transition: var(--transition-smooth);
+}
+
+.store-card.selected::before {
     opacity: 1;
     transform: scale(1);
-    transition: var(--transition-smooth);
 }
 
 /* ===========================
