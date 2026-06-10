@@ -11,8 +11,8 @@ app.use(express.static('public'));
 
 app.use('/res', express.static('res'));
 
-app.post('/login', (req, res) =>{
-    const {username, password} = req.body;
+app.post('/login', (req, res) => {
+    const { username, password } = req.body;
     const sql = 'SELECT * FROM usuarios WHERE usuario = ? AND contrasena = ?';
 
     db.query(sql, [username, password], (err, resultados) => {
@@ -20,7 +20,7 @@ app.post('/login', (req, res) =>{
 
         console.log(resultados);
 
-        if (resultados.length > 0){
+        if (resultados.length > 0) {
             res.send('Inicio de sesión exitoso');
         } else {
             res.send('Credenciales incorrectas');
@@ -28,8 +28,8 @@ app.post('/login', (req, res) =>{
     });
 });
 
-app.post('/signin', (req, res) =>{
-    const {usernameSign, passwordSign} = req.body;
+app.post('/signin', (req, res) => {
+    const { usernameSign, passwordSign } = req.body;
     const sql = 'SELECT * FROM usuarios WHERE usuario = ?';
 
     db.query(sql, [usernameSign], (err, resultados) => {
@@ -37,14 +37,14 @@ app.post('/signin', (req, res) =>{
 
         console.log(resultados);
 
-        if (resultados.length > 0){
+        if (resultados.length > 0) {
             res.send('Ya existe un usuario con ese nombre.');
         } else {
             const insertUser = "INSERT INTO usuarios(usuario, contrasena) VALUES (?,?)"
-            db.query(insertUser, [usernameSign, passwordSign], (err, resultados)=>{
+            db.query(insertUser, [usernameSign, passwordSign], (err, resultados) => {
                 if (err) throw err;
 
-                if (resultados.affectedRows > 0){
+                if (resultados.affectedRows > 0) {
                     res.send('Usuario registrado exitosamente');
                 } else {
                     res.send('Error al registrar el usuario');
@@ -54,6 +54,6 @@ app.post('/signin', (req, res) =>{
     });
 });
 
-app.listen(3000, ()=>{
+app.listen(3000, () => {
     console.log('Servidor corriendo en http://localhost:3000');
 });
